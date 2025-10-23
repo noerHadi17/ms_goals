@@ -1,0 +1,48 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+goal:
+  assumptions:
+    defaultProfile: MODERATE
+    profiles:
+      CONSERVATIVE: 0.06
+      MODERATE: 0.12
+      AGGRESSIVE: 0.20
+    inflationAnnual: 0.03
+    depositAnnual: 0.03
+    compounding: MONTHLY
+  tracking:
+    thresholdPct: 0.10
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:29092}
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/wms}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  messages:
+    basename: messages
+    encoding: UTF-8
+
+logging:
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    com.wms.goals: INFO
+
+kafka:
+  topics:
+    audit: ${KAFKA_TOPIC_AUDIT:audit.events}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
